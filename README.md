@@ -52,12 +52,42 @@ python3 tests/test_utils.py
 - **Python**: 工具函数和测试
 - **Git**: 版本控制
 - **GitHub**: 代码托管
+- **Claude Code**: AI 编程助手
+- **GitHub MCP**: GitHub MCP 服务器
 
 ## 开发环境
 
 - macOS
 - C++ 编译器 (g++/clang++)
 - Python 3.6+
+- Claude Code
+- GitHub MCP Server
+
+## GitHub MCP 配置
+
+本项目已配置 GitHub MCP 服务器，支持以下功能：
+
+### 配置文件
+- `.mcp.json` - GitHub MCP 服务器配置
+- `.claude/settings.local.json` - 权限配置
+
+### 使用方法
+1. 设置 GitHub 个人访问令牌：
+   ```bash
+   export GITHUB_PERSONAL_ACCESS_TOKEN="your_token"
+   ```
+2. 重新启动 Claude Code
+3. 使用 GitHub MCP 功能
+
+### 支持的功能
+- 仓库管理
+- 代码协作
+- 问题管理
+- 搜索功能
+- 分支管理
+- 提交历史
+
+详细配置请参考：`/Users/bcl/GITHUB_MCP_SETUP.md`
 
 ## 许可证
 
