@@ -58,12 +58,10 @@ Page({
     }
   },
 
-  getUserInfo: function(e) {
-    console.log(e)
-    app.globalData.userInfo = e.detail.userInfo
-    this.setData({
-      userInfo: e.detail.userInfo,
-      hasUserInfo: true
+  // 跳转到俄罗斯方块游戏
+  goToTetris: function() {
+    wx.navigateTo({
+      url: '../tetris/tetris'
     })
   },
 

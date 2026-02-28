@@ -14,4 +14,7 @@
     <button bindtap="addCount">点我加1</button>
     <text>当前计数：{{count}}</text>
   </view>
+  <view class="game-entry">
+    <button bindtap="goToTetris" style="background-color: #07C160; color: white; margin-top: 30px;">开始俄罗斯方块游戏</button>
+  </view>
 </view>

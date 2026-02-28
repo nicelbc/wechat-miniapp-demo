@@ -1,0 +1,118 @@
+<!-- tetris.wxml -->
+<view class="game-container">
+  <!-- 游戏信息面板 -->
+  <view class="game-info">
+    <view class="info-item">
+      <text class="info-label">分数</text>
+      <text class="info-value">{{score}}</text>
+    </view>
+    <view class="info-item">
+      <text class="info-label">关卡</text>
+      <text class="info-value">{{level}}</text>
+    </view>
+    <view class="info-item">
+      <text class="info-label">行数</text>
+      <text class="info-value">{{lines}}</text>
+    </view>
+  </view>
+
+  <!-- 下一个方块预览 -->
+  <view class="next-piece-container" wx:if="{{nextPiece}}">
+    <text class="next-piece-label">下一个</text>
+    <view class="next-piece-board">
+      <block wx:for="{{nextPiece.shape}}" wx:for-item="row" wx:key="row">
+        <view class="next-piece-row">
+          <block wx:for="{{row}}" wx:for-item="cell" wx:key="cell">
+            <view class="next-piece-cell {{cell ? 'filled' : 'empty'}}" style="{{cell ? 'background-color: ' + nextPiece.color : ''}}"></view>
+          </block>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 游戏板 -->
+  <view class="game-board"
+        bindtouchstart="handleTouchStart"
+        bindtouchmove="handleTouchMove"
+        bindtouchend="handleTouchEnd">
+    <block wx:for="{{board}}" wx:for-item="row" wx:for-index="rowIndex" wx:key="rowIndex">
+      <view class="board-row">
+        <block wx:for="{{row}}" wx:for-item="cell" wx:for-index="colIndex" wx:key="colIndex">
+          <view class="board-cell {{cell ? 'filled' : 'empty'}}"
+                style="{{cell ? 'background-color: ' + getCellColor(cell) : ''}}"></view>
+        </block>
+      </view>
+    </block>
+
+    <!-- 当前方块叠加显示 -->
+    <view class="current-piece-overlay" wx:if="{{currentPiece}}">
+      <block wx:for="{{currentPiece.shape}}" wx:for-item="row" wx:for-index="rowIndex" wx:key="rowIndex">
+        <block wx:for="{{row}}" wx:for-item="cell" wx:for-index="colIndex" wx:key="colIndex">
+          <view class="board-cell filled"
+                wx:if="{{cell}}"
+                style="background-color: {{currentPiece.color}}; position: absolute; left: {{(currentX + colIndex) * 32}}rpx; top: {{(currentY + rowIndex) * 32}}rpx;"></view>
+        </block>
+      </block>
+    </view>
+  </view>
+
+  <!-- 游戏状态覆盖层 -->
+  <view class="game-overlay" wx:if="{{!isPlaying || isPaused || isGameOver}}">
+    <view class="overlay-content">
+      <view class="overlay-title" wx:if="{{!isPlaying && !isGameOver}}">
+        俄罗斯方块
+      </view>
+      <view class="overlay-title" wx:if="{{isPaused}}">
+        游戏暂停
+      </view>
+      <view class="overlay-title" wx:if="{{isGameOver}}">
+        游戏结束
+      </view>
+      <view class="overlay-score" wx:if="{{isGameOver}}">
+        最终得分：{{score}}
+      </view>
+      <view class="overlay-buttons">
+        <button class="game-button start-button"
+                bindtap="handleControl"
+                data-action="start"
+                wx:if="{{!isPlaying || isGameOver}}">
+          开始游戏
+        </button>
+        <button class="game-button resume-button"
+                bindtap="handleControl"
+                data-action="pause"
+                wx:if="{{isPaused}}">
+          继续游戏
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 控制按钮 -->
+  <view class="controls" wx:if="{{isPlaying && !isPaused && !isGameOver}}">
+    <view class="control-row">
+      <button class="control-button" bindtap="handleControl" data-action="left">←</button>
+      <button class="control-button rotate-button" bindtap="handleControl" data-action="rotate">↻</button>
+      <button class="control-button" bindtap="handleControl" data-action="right">→</button>
+    </view>
+    <view class="control-row">
+      <button class="control-button" bindtap="handleControl" data-action="down">↓</button>
+      <button class="control-button drop-button" bindtap="handleControl" data-action="drop">↓↓</button>
+      <button class="control-button pause-button" bindtap="handleControl" data-action="pause">⏸</button>
+    </view>
+  </view>
+
+  <!-- 高分记录 -->
+  <view class="high-scores" wx:if="{{highScores.length > 0 && (!isPlaying || isGameOver)}}">
+    <text class="high-scores-title">高分记录</text>
+    <view class="high-scores-list">
+      <block wx:for="{{highScores}}" wx:for-item="scoreItem" wx:key="index">
+        <view class="high-score-item">
+          <text class="high-score-rank">{{index + 1}}</text>
+          <text class="high-score-value">{{scoreItem.score}}</text>
+          <text class="high-score-level">Lv.{{scoreItem.level}}</text>
+        </view>
+      </block>
+    </view>
+  </view>
+</view>
